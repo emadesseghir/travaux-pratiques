@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 30px;
+  line-height: 1.6;
+}
+
+.resume {
+  max-width: 800px;
+  background: white;
+  margin: auto;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+  color: #333;
+}
+
+.header {
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.contact {
+  font-size: 0.9em;
+  color: #777;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+.section-title {
+  color: #2c3e50;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.back-home {
+  margin: 20px;
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.back-home:hover {
+  text-decoration: underline;
+}
+.icon {
+  margin-right: 5px;
+}
+
+.profile-pic {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  float: right;
+}
