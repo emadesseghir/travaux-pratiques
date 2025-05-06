@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Content</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2980b9;
+        --text-color: #333;
+        --light-gray: #f5f5f5;
+        --medium-gray: #e0e0e0;
+        --dark-gray: #7f8c8d;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+        color: var(--text-color);
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 20px;
+      }
+      .course-header {
+        grid-column: 1 / -1;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 30px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .course-title {
+        margin: 0;
+        font-size: 2.2em;
+      }
+      .course-meta {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+        font-size: 0.95em;
+      }
+      .course-sidebar {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+      }
+      .sidebar-section {
+        margin-bottom: 25px;
+      }
+      .sidebar-title {
+        font-size: 1.1em;
+        margin: 0 0 15px 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--medium-gray);
+        color: var(--secondary-color);
+      }
+      .sidebar-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .sidebar-list li {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--light-gray);
+      }
+      .sidebar-list a {
+        color: var(--text-color);
+        text-decoration: none;
+        display: block;
+        transition: color 0.2s;
+      }
+      .sidebar-list a:hover {
+        color: var(--primary-color);
+      }
+      .sidebar-list a.active {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+      .course-content {
+        background: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .content-section {
+        margin-bottom: 30px;
+      }
+      .content-title {
+        font-size: 1.5em;
+        margin: 0 0 20px 0;
+        color: var(--secondary-color);
+      }
+      .lesson-content {
+        line-height: 1.8;
+      }
+      .lesson-content h3 {
+        color: var(--secondary-color);
+        margin-top: 25px;
+      }
+      .lesson-content p {
+        margin: 15px 0;
+      }
+      .lesson-content ul,
+      .lesson-content ol {
+        margin: 15px 0;
+        padding-left: 20px;
+      }
+      .resource-card {
+        background: var(--light-gray);
+        border-left: 4px solid var(--primary-color);
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 0 4px 4px 0;
+      }
+      .resource-card h4 {
+        margin: 0 0 10px 0;
+      }
+      .resource-card a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .resource-card a:hover {
+        text-decoration: underline;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: var(--dark-gray);
+        text-decoration: none;
+        font-size: 0.9em;
+      }
+      .back-link:hover {
+        color: var(--primary-color);
+      }
+      .tab-container {
+        margin-top: 20px;
+      }
+      .tab-buttons {
+        display: flex;
+        border-bottom: 1px solid var(--medium-gray);
+        margin-bottom: 20px;
+      }
+      .tab-button {
+        padding: 10px 20px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        border-bottom: 3px solid transparent;
+        margin-right: 5px;
+      }
+      .tab-button.active {
+        border-bottom: 3px solid var(--primary-color);
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+        .course-sidebar {
+          order: 2;
+        }
+      }
+
+      .back-home {
+        min-width: 100%;
+        margin: 20px;
+        display: inline-block;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      .back-home:hover {
+        text-decoration: underline;
+      }
+
+      .icon {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="./index.html" class="back-home"
+        ><i class="fas fa-home icon"></i>Retour</a
+      >
+      <div class="course-header">
+        <h1 id="courseTitle" class="course-title">Course Title</h1>
+        <div class="course-meta">
+          <span
+            >Professor:
+            <a
+              id="professorName"
+              href="#"
+              style="color: white; text-decoration: underline"
+              >Prof. Name</a
+            ></span
+          >
+          <span>Schedule: <span id="courseSchedule">Day, Time</span></span>
+          <span>Credits: <span id="courseCredits">X</span></span>
+        </div>
+      </div>
+
+      <div class="course-sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Course Navigation</h3>
+          <ul class="sidebar-list" id="courseNavigation">
+            <!-- Filled by JavaScript -->
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Resources</h3>
+          <ul class="sidebar-list" id="courseResources">
+            <!-- Filled by JavaScript -->
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Professor</h3>
+          <p id="professorContact">
+            Contact: <a href="#" id="professorEmail">email@univ.edu</a>
+          </p>
+          <p>Office hours: <span id="officeHours">Mon 2-4pm</span></p>
+        </div>
+
+        <a href="javascript:history.back()" class="back-link"
+          >← Back to timetable</a
+        >
+      </div>
+
+      <div class="course-content">
+        <div class="tab-container">
+          <div class="tab-buttons">
+            <button class="tab-button active" data-tab="lessons">
+              Lessons
+            </button>
+            <button class="tab-button" data-tab="assignments">
+              Assignments
+            </button>
+            <button class="tab-button" data-tab="exams">Exams</button>
+          </div>
+
+          <div id="lessons" class="tab-content active">
+            <div class="content-section">
+              <h2 class="content-title" id="currentLessonTitle">
+                Introduction to Course
+              </h2>
+              <div class="lesson-content" id="lessonContent">
+                <!-- Lesson content will be loaded here -->
+              </div>
+            </div>
+          </div>
+
+          <div id="assignments" class="tab-content">
+            <div class="content-section">
+              <h2 class="content-title">Course Assignments</h2>
+              <div id="assignmentsContent">
+                <!-- Assignments will be loaded here -->
+              </div>
+            </div>
+          </div>
+
+          <div id="exams" class="tab-content">
+            <div class="content-section">
+              <h2 class="content-title">Exams Information</h2>
+              <div id="examsContent">
+                <!-- Exams info will be loaded here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Course database with full content
+      const courseDatabase = {
+        "Programmation web dynamique CM": {
+          title: "Programmation web dynamique",
+          type: "CM",
+          professor: "K. OMARI",
+          professorEmail: "k.omari@univ.edu",
+          schedule: "Lundi, 10:00-12:00",
+          location: "Salle A12",
+          credits: "4",
+          officeHours: "Lundi 16:00-18:00",
+          description:
+            "Cours avancé sur le développement web côté serveur avec des technologies modernes.",
+
+          lessons: [
+            {
+              title: "Introduction au développement web dynamique",
+              content: `
+                            <h3>Objectifs du cours</h3>
+                            <p>Ce cours vise à maîtriser les concepts fondamentaux du développement web dynamique côté serveur.</p>
+                            
+                            <h3>Plan du cours</h3>
+                            <ol>
+                                <li>Architecture des applications web</li>
+                                <li>Protocole HTTP et cycle de requête-réponse</li>
+                                <li>Introduction à Node.js et Express</li>
+                                <li>Templates et moteurs de rendu</li>
+                                <li>Accès aux bases de données</li>
+                            </ol>
+                            
+                            <h3>Ressources recommandées</h3>
+                            <ul>
+                                <li>MDN Web Docs - HTTP</li>
+                                <li>Documentation officielle Node.js</li>
+                                <li>Express.js Guide</li>
+                            </ul>
+                        `,
+            },
+            {
+              title: "Node.js et Express.js",
+              content: `
+                            <h3>Introduction à Node.js</h3>
+                            <p>Node.js est un environnement d'exécution JavaScript côté serveur basé sur le moteur V8 de Chrome.</p>
+                            
+                            <h3>Caractéristiques principales</h3>
+                            <ul>
+                                <li>Modèle non-bloquant et asynchrone</li>
+                                <li>Gestion des paquets avec npm</li>
+                                <li>Grand écosystème de modules</li>
+                            </ul>
+                            
+                            <h3>Express.js Framework</h3>
+                            <p>Express est un framework web minimaliste pour Node.js qui fournit :</p>
+                            <ul>
+                                <li>Routage des requêtes</li>
+                                <li>Middleware</li>
+                                <li>Intégration avec des moteurs de template</li>
+                            </ul>
+                            
+                            <div class="resource-card">
+                                <h4>Exercice Pratique</h4>
+                                <p>Créez un serveur Express de base qui répond aux routes suivantes :</p>
+                                <ul>
+                                    <li>GET / → "Accueil"</li>
+                                    <li>GET /about → "À propos"</li>
+                                    <li>GET /contact → "Contactez-nous"</li>
+                                </ul>
+                            </div>
+                        `,
+            },
+            // More lessons would be added here
+          ],
+
+          resources: [
+            { name: "Syllabus du cours", type: "pdf", link: "#" },
+            { name: "Slides - Introduction", type: "pptx", link: "#" },
+            {
+              name: "Documentation Express",
+              type: "link",
+              link: "https://expressjs.com/",
+            },
+            { name: "Exemple de code", type: "zip", link: "#" },
+          ],
+
+          assignments: [
+            {
+              title: "Projet 1 - Serveur Web Basique",
+              due: "15/10/2023",
+              description:
+                "Implémenter un serveur web avec Node.js et Express qui gère plusieurs routes et renvoie des réponses différentes.",
+              points: 20,
+            },
+            {
+              title: "Projet 2 - Application CRUD",
+              due: "05/11/2023",
+              description:
+                "Développer une application web avec opérations CRUD utilisant une base de données MongoDB.",
+              points: 30,
+            },
+          ],
+
+          exams: [
+            {
+              type: "Midterm",
+              date: "25/10/2023",
+              duration: "2 heures",
+              topics: "Tout le matériel couvert jusqu'à la semaine 4",
+              weight: "30%",
+            },
+            {
+              type: "Final",
+              date: "20/12/2023",
+              duration: "3 heures",
+              topics: "Tout le matériel du cours",
+              weight: "40%",
+            },
+          ],
+        },
+        // Other courses would follow the same structure
+        "Programmation web dynamique TD/TP": {
+          // ... similar structure for TD/TP course
+        },
+      };
+
+      // Get course name from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseName = urlParams.get("name");
+
+      // Initialize page with course data
+      if (courseName && courseDatabase[courseName]) {
+        const course = courseDatabase[courseName];
+
+        // Set basic course info
+        document.title = `${course.title} ${course.type} - Contenu du Cours`;
+        document.getElementById(
+          "courseTitle"
+        ).textContent = `${course.title} ${course.type}`;
+        document.getElementById("professorName").textContent = course.professor;
+        document.getElementById(
+          "professorName"
+        ).href = `contact.html?prof=${encodeURIComponent(course.professor)}`;
+        document.getElementById("professorEmail").textContent =
+          course.professorEmail;
+        document.getElementById(
+          "professorEmail"
+        ).href = `mailto:${course.professorEmail}`;
+        document.getElementById("courseSchedule").textContent = course.schedule;
+        document.getElementById("courseCredits").textContent = course.credits;
+        document.getElementById("officeHours").textContent = course.officeHours;
+
+        // Populate navigation
+        const navList = document.getElementById("courseNavigation");
+        course.lessons.forEach((lesson, index) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = "#";
+          a.textContent = lesson.title;
+          a.onclick = () => loadLesson(index);
+          if (index === 0) a.classList.add("active");
+          li.appendChild(a);
+          navList.appendChild(li);
+        });
+
+        // Populate resources
+        const resList = document.getElementById("courseResources");
+        course.resources.forEach((resource) => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = resource.link;
+          a.textContent = `${resource.name} (${resource.type})`;
+          li.appendChild(a);
+          resList.appendChild(li);
+        });
+
+        // Load first lesson by default
+        if (course.lessons.length > 0) {
+          loadLesson(0);
+        }
+
+        // Populate assignments
+        const assignmentsContent =
+          document.getElementById("assignmentsContent");
+        course.assignments.forEach((assignment) => {
+          const div = document.createElement("div");
+          div.className = "resource-card";
+          div.innerHTML = `
+                    <h4>${assignment.title}</h4>
+                    <p><strong>Date limite:</strong> ${assignment.due}</p>
+                    <p><strong>Points:</strong> ${assignment.points}</p>
+                    <p>${assignment.description}</p>
+                `;
+          assignmentsContent.appendChild(div);
+        });
+
+        // Populate exams
+        const examsContent = document.getElementById("examsContent");
+        course.exams.forEach((exam) => {
+          const div = document.createElement("div");
+          div.className = "resource-card";
+          div.innerHTML = `
+                    <h4>${exam.type}</h4>
+                    <p><strong>Date:</strong> ${exam.date}</p>
+                    <p><strong>Durée:</strong> ${exam.duration}</p>
+                    <p><strong>Pondération:</strong> ${exam.weight}</p>
+                    <p><strong>Sujets couverts:</strong> ${exam.topics}</p>
+                `;
+          examsContent.appendChild(div);
+        });
+
+        // Tab functionality
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            // Remove active class from all buttons and content
+            document
+              .querySelectorAll(".tab-button")
+              .forEach((btn) => btn.classList.remove("active"));
+            document
+              .querySelectorAll(".tab-content")
+              .forEach((content) => content.classList.remove("active"));
+
+            // Add active class to clicked button and corresponding content
+            button.classList.add("active");
+            const tabId = button.getAttribute("data-tab");
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+
+        // Function to load lesson content
+        function loadLesson(index) {
+          const lesson = course.lessons[index];
+          document.getElementById("currentLessonTitle").textContent =
+            lesson.title;
+          document.getElementById("lessonContent").innerHTML = lesson.content;
+
+          // Update active nav item
+          document.querySelectorAll("#courseNavigation a").forEach((a, i) => {
+            if (i === index) {
+              a.classList.add("active");
+            } else {
+              a.classList.remove("active");
+            }
+          });
+        }
+      } else {
+        document.getElementById("courseTitle").textContent = "Cours non trouvé";
+        document.getElementById("lessonContent").innerHTML =
+          "<p>Le contenu du cours demandé n'a pas pu être chargé. Veuillez retourner à l'emploi du temps et réessayer.</p>";
+      }
+    </script>
+  </body>
+</html>
