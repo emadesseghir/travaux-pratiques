@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Interactif Complet</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+        background-color: #f5f7fa;
+        color: #333;
+      }
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .quiz-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        display: block;
+        margin: 20px auto;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+      #question-container {
+        display: none;
+        margin-bottom: 20px;
+      }
+      #question {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+      #reponse-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+      #feedback {
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+      .correct {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .incorrect {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      #resultat {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #e9ecef;
+        border-radius: 8px;
+        text-align: center;
+        display: none;
+      }
+      #score {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      #progress {
+        margin: 20px 0;
+        height: 10px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      #progress-bar {
+        height: 100%;
+        background-color: #3498db;
+        width: 0%;
+        transition: width 0.3s;
+      }
+      .hidden {
+        display: none;
+      }
+      .back-home {
+        margin: 20px;
+        display: inline-block;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+      .back-home:hover {
+        text-decoration: underline;
+      }
+      .icon {
+        margin-right: 5px;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <a href="../index.html" class="back-home"
+      ><i class="fas fa-home icon"></i>Retour à la page d'accueil</a
+    >
+    <div class="quiz-container">
+      <h1>Quiz Interactif</h1>
+
+      <div id="start-screen">
+        <p>
+          Bienvenue dans ce quiz interactif ! Vous allez répondre à une série de
+          questions.
+        </p>
+        <button id="start-btn">Commencer le quiz</button>
+      </div>
+
+      <div id="quiz-screen" class="hidden">
+        <div id="progress">
+          <div id="progress-bar"></div>
+        </div>
+
+        <div id="question-container">
+          <div id="question"></div>
+          <input
+            type="text"
+            id="reponse-input"
+            placeholder="Votre réponse..."
+          />
+          <button id="submit-btn">Valider</button>
+        </div>
+
+        <div id="feedback"></div>
+      </div>
+
+      <div id="resultat">
+        <h2>Résultats du quiz</h2>
+        <p id="score"></p>
+        <p id="details"></p>
+        <button id="restart-btn">Recommencer</button>
+      </div>
+    </div>
+
+    <script>
+      // 1. Préparation des questions
+      const QUESTIONS = [
+        ["Quelle est la capitale de la France ?", "Paris"],
+        ["Combien de continents y a-t-il sur Terre ?", "7"],
+        ["Quel est le plus grand océan du monde ?", "Pacifique"],
+        ["En quelle année a eu lieu la Révolution française ?", "1789"],
+        ["Quel est le symbole chimique de l'or ?", "Au"],
+        ["Quelle planète est surnommée 'la planète rouge' ?", "Mars"],
+        ["Qui a peint la Joconde ?", "Léonard de Vinci"],
+        ["Quel est le plus long fleuve du monde ?", "Amazone"],
+        ["Dans quel pays se trouve la ville de Pompéi ?", "Italie"],
+        [
+          "Quel est le nom du premier homme à avoir marché sur la Lune ?",
+          "Neil Armstrong",
+        ],
+      ];
+
+      // Variables d'état
+      let currentQuestionIndex = 0;
+      let score = 0;
+      let quizStarted = false;
+
+      // Éléments du DOM
+      const startScreen = document.getElementById("start-screen");
+      const quizScreen = document.getElementById("quiz-screen");
+      const questionContainer = document.getElementById("question-container");
+      const questionElement = document.getElementById("question");
+      const reponseInput = document.getElementById("reponse-input");
+      const submitBtn = document.getElementById("submit-btn");
+      const feedbackElement = document.getElementById("feedback");
+      const resultatElement = document.getElementById("resultat");
+      const scoreElement = document.getElementById("score");
+      const detailsElement = document.getElementById("details");
+      const progressBar = document.getElementById("progress-bar");
+      const startBtn = document.getElementById("start-btn");
+      const restartBtn = document.getElementById("restart-btn");
+
+      // Écouteurs d'événements
+      startBtn.addEventListener("click", commencerQuiz);
+      submitBtn.addEventListener("click", verifierReponse);
+      restartBtn.addEventListener("click", recommencerQuiz);
+      reponseInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          verifierReponse();
+        }
+      });
+
+      // Fonctions
+      function commencerQuiz() {
+        quizStarted = true;
+        startScreen.classList.add("hidden");
+        quizScreen.classList.remove("hidden");
+        questionContainer.style.display = "block";
+        currentQuestionIndex = 0;
+        score = 0;
+        afficherQuestion();
+      }
+
+      function afficherQuestion() {
+        if (currentQuestionIndex < QUESTIONS.length) {
+          const question = QUESTIONS[currentQuestionIndex][0];
+          questionElement.textContent = question;
+          reponseInput.value = "";
+          reponseInput.focus();
+          feedbackElement.style.display = "none";
+
+          // Mettre à jour la barre de progression
+          const progress = (currentQuestionIndex / QUESTIONS.length) * 100;
+          progressBar.style.width = `${progress}%`;
+        } else {
+          terminerQuiz();
+        }
+      }
+
+      function verifierReponse() {
+        const reponseUtilisateur = reponseInput.value.trim();
+        const reponseCorrecte = QUESTIONS[currentQuestionIndex][1];
+
+        if (!reponseUtilisateur) {
+          alert("Veuillez entrer une réponse !");
+          return;
+        }
+
+        feedbackElement.style.display = "block";
+
+        if (
+          reponseUtilisateur.toLowerCase() === reponseCorrecte.toLowerCase()
+        ) {
+          feedbackElement.textContent = "Correct !";
+          feedbackElement.className = "correct";
+          score++;
+        } else {
+          feedbackElement.textContent = `Incorrect. La bonne réponse était : ${reponseCorrecte}`;
+          feedbackElement.className = "incorrect";
+        }
+
+        currentQuestionIndex++;
+        setTimeout(afficherQuestion, 1500);
+      }
+
+      function terminerQuiz() {
+        quizScreen.classList.add("hidden");
+        resultatElement.style.display = "block";
+
+        const pourcentage = Math.round((score / QUESTIONS.length) * 100);
+        scoreElement.textContent = `Score final : ${score}/${QUESTIONS.length}`;
+        detailsElement.textContent = `Vous avez répondu correctement à ${score} questions sur ${QUESTIONS.length} (${pourcentage}%)`;
+
+        // Animation de la barre de progression finale
+        progressBar.style.width = "100%";
+      }
+
+      function recommencerQuiz() {
+        resultatElement.style.display = "none";
+        commencerQuiz();
+      }
+    </script>
+  </body>
+</html>
